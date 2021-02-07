@@ -1,0 +1,45 @@
+version: '3.8'
+    
+services:
+  app:
+    image: https1/app:1.0
+    build: ./app
+    container_name: 'https1_app'
+    expose: 
+      - "3000"
+    stdin_open: true
+    tty: true
+    working_dir: '/var/www/html'
+    volumes:
+      - ../app:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: https1/mysql:1.0
+    build: ./db
+    container_name: 'https1_db'
+    expose: 
+      - "3306"
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=my
+      - MYSQL_USER=my
+      - MYSQL_PASSWORD=my
+    volumes:
+      - ../db/database:/var/lib/mysql
+      - ../db/init:/docker-entrypoint-initdb.d
+
+  web:
+    image: nginx:1.19
+    container_name: 'https1_web'
+    ports:
+      - '443:443'
+    depends_on:
+      - app
+    volumes:
+      - ./web/default.conf:/etc/nginx/conf.d/default.conf
+      - ./web/localhost.pem:/etc/certs/localhost.pem
+      - ./web/localhost-key.pem:/etc/certs/localhost-key.pem
+      - ../app:/var/www/html

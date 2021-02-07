@@ -1,0 +1,13 @@
+{
+  "name": "PHP Basic Project",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/var/www/html",
+  "extensions": [
+    "felixfbecker.php-debug",
+    "felixfbecker.php-intellisense"
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+  },
+}

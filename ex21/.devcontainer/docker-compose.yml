@@ -1,0 +1,15 @@
+version: '3.8'
+    
+services:
+  web:
+    image: ex21/web:1.0
+    build: ./web
+    container_name: 'ex21_web'
+    ports:
+      - 8080:80
+    stdin_open: true
+    tty: true
+    working_dir: '/var/www/html'
+    volumes:
+      - ./web/php.ini:/usr/local/etc/php/php.ini
+      - ../web:/var/www/html

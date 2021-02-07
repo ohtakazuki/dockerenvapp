@@ -1,0 +1,13 @@
+{
+  "name": "Laravel PHP-FPM",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/var/www/html",
+  "extensions": [
+    "felixfbecker.php-debug",
+    "felixfbecker.php-intellisense"
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+  },
+}

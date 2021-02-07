@@ -1,0 +1,44 @@
+version: '3.8'
+    
+services:
+  app:
+    image: laravel2/app:1.0
+    build: ./app
+    container_name: 'laravel2_app'
+    ports:
+      - '8000:8000'
+    stdin_open: true
+    tty: true
+    working_dir: '/var/www/html'
+    volumes:
+      - ./app/php.ini:/usr/local/etc/php/php.ini
+      - ../app:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: laravel2/mysql:1.0
+    build: ./db
+    container_name: 'laravel2_db'
+    expose: 
+      - "3306"
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=my
+      - MYSQL_USER=my
+      - MYSQL_PASSWORD=my
+    volumes:
+      - ../db/database:/var/lib/mysql
+      - ../db/init:/docker-entrypoint-initdb.d
+
+  web:
+    image: nginx:1.19
+    container_name: 'laravel2_web'
+    ports:
+      - '8080:80'
+    depends_on:
+      - app
+    volumes:
+      - ./web/default.conf:/etc/nginx/conf.d/default.conf
+      - ../app:/var/www/html
