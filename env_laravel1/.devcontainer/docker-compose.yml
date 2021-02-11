@@ -2,9 +2,9 @@ version: '3.8'
     
 services:
   app:
-    image: laravel/app:1.0
+    image: laravel1/app:1.0
     build: ./app
-    container_name: 'laravel_app'
+    container_name: 'laravel1_app'
     ports:
       - '8000:8000'
     stdin_open: true
@@ -17,9 +17,9 @@ services:
       - db
 
   db:
-    image: laravel/mysql:1.0
+    image: laravel1/mysql:1.0
     build: ./db
-    container_name: 'laravel_db'
+    container_name: 'laravel1_db'
     expose: 
       - "3306"
     environment:
