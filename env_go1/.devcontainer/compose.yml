@@ -1,10 +1,8 @@
-version: '3.8'
-    
 services:
   app:
     image: go1/app:1.0
     build: ./app
-    container_name: 'go1_app'
+    container_name: 'go1-app'
     ports:
       - '8080:8080'
     stdin_open: true
@@ -18,7 +16,7 @@ services:
   db:
     image: go1/mysql:1.0
     build: ./db
-    container_name: 'go1_db'
+    container_name: 'go1-db'
     expose: 
       - "3306"
     environment:

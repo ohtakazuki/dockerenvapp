@@ -1,10 +1,8 @@
-version: '3.8'
-    
 services:
   app:
     image: node1/app:1.0
     build: ./app
-    container_name: 'node1_app'
+    container_name: 'node1-app'
     ports:
       - '3000:3000'
     stdin_open: true
@@ -16,8 +14,8 @@ services:
       - db
 
   db:
-    image: mongo:4.4-bionic
-    container_name: 'node1_db'
+    image: mongo:6.0-jammy
+    container_name: 'node1-db'
     expose: 
       - "27017"
     environment:

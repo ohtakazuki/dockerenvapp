@@ -1,10 +1,8 @@
-version: '3.8'
-    
 services:
   app:
     image: node2/app:1.0
     build: ./app
-    container_name: 'node2_app'
+    container_name: 'node2-app'
     ports:
       - '3000:3000'
     stdin_open: true
@@ -17,7 +15,7 @@ services:
 
   db:
     image: mongo:4.4-bionic
-    container_name: 'node2_db'
+    container_name: 'node2-db'
     expose: 
       - "27017"
     environment:
@@ -31,7 +29,7 @@ services:
 
   web:
     image: nginx:1.19
-    container_name: 'node2_web'
+    container_name: 'node2-web'
     ports:
       - '8080:80'
     depends_on:

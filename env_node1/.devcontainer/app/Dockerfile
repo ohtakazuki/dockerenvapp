@@ -1,4 +1,4 @@
-FROM node:15.5-alpine
+FROM node:20.3-alpine
 
 # パッケージのインストール、タイムゾーン設定
 RUN apk --update --no-cache add \

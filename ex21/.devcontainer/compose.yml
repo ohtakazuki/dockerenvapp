@@ -1,10 +1,8 @@
-version: '3.8'
-    
 services:
   web:
     image: ex21/web:1.0
     build: ./web
-    container_name: 'ex21_web'
+    container_name: 'ex21-web'
     ports:
       - 8080:80
     stdin_open: true

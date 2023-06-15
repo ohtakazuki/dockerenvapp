@@ -1,10 +1,8 @@
-version: '3.8'
-    
 services:
   app:
     image: https1/app:1.0
     build: ./app
-    container_name: 'https1_app'
+    container_name: 'https1-app'
     expose: 
       - "3000"
     stdin_open: true
@@ -18,7 +16,7 @@ services:
   db:
     image: https1/mysql:1.0
     build: ./db
-    container_name: 'https1_db'
+    container_name: 'https1-db'
     expose: 
       - "3306"
     environment:
@@ -33,7 +31,7 @@ services:
 
   web:
     image: nginx:1.19
-    container_name: 'https1_web'
+    container_name: 'https1-web'
     ports:
       - '443:443'
     depends_on:

@@ -3,7 +3,7 @@ print('ただいまの日時は、'.date("Y-m-d H:i:s").'です。<br>');
 
 // 接続情報
 $dbname='postgres';
-$host='ex11_db';
+$host='ex11-db';
 $dbuser='postgres';
 $dbpass='postgres';
 

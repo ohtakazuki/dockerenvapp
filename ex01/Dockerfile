@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.2-apache
 
 # メタ情報の付与
 LABEL maintainer="usermail@hogehoge.com"

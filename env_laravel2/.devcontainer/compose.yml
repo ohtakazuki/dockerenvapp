@@ -1,24 +1,23 @@
-version: '3.8'
-    
 services:
   app:
-    image: go2/app:1.0
+    image: laravel2/app:1.0
     build: ./app
-    container_name: 'go2_app'
-    expose: 
-      - "3000"
+    container_name: 'laravel2-app'
+    ports:
+      - '8000:8000'
     stdin_open: true
     tty: true
     working_dir: '/var/www/html'
     volumes:
+      - ./app/php.ini:/usr/local/etc/php/php.ini
       - ../app:/var/www/html
     depends_on:
       - db
 
   db:
-    image: go2/mysql:1.0
+    image: laravel2/mysql:1.0
     build: ./db
-    container_name: 'go2_db'
+    container_name: 'laravel2-db'
     expose: 
       - "3306"
     environment:
@@ -33,7 +32,7 @@ services:
 
   web:
     image: nginx:1.19
-    container_name: 'go2_web'
+    container_name: 'laravel2-web'
     ports:
       - '8080:80'
     depends_on:
