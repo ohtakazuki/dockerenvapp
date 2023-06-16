@@ -20,9 +20,9 @@ services:
       - "27017"
     environment:
       - TZ=Asia/Tokyo
-      - MONGO_INITDB_ROOT_USERNAME=mongo
-      - MONGO_INITDB_ROOT_PASSWORD=mongo
-      - MONGO_INITDB_DATABASE=mongo
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     volumes:
       - ../db/database:/data/db
       - ../db/init:/docker-entrypoint-initdb.d
