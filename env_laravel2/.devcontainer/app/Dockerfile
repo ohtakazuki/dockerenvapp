@@ -1,10 +1,11 @@
-FROM php:7.4-fpm
+FROM php:8.2-fpm
 
 # composerのインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # パッケージのインストール
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -qq \
+ && apt-get install -y --no-install-recommends \
     tzdata \
     zip \
     unzip \
@@ -13,4 +14,4 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # タイムゾーンを設定する環境変数
-ENV TZ=Asia/Tokyo
+ENV TZ="Asia/Tokyo"

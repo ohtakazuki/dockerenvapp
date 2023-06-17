@@ -1,13 +1,12 @@
-FROM golang:1.15-buster
+FROM golang:1.20-alpine
 
-# タイムゾーンの設定、パッケージのインストール
-RUN apt-get update && apt-get install -y \
+# パッケージのインストール、タイムゾーン設定
+RUN apk --update --no-cache add \
     tzdata \
- && rm -rf /var/lib/apt/lists/* \
- && go get -u github.com/gin-gonic/gin \
- && go get -u gorm.io/gorm \
- && go get -u gorm.io/driver/mysql \
- && go get -u github.com/derekparker/delve/cmd/dlv
+ && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && apk del tzdata
 
-# タイムゾーンを設定する環境変数
-ENV TZ=Asia/Tokyo
+# デバッグ用ツールのインストール
+RUN go install -v github.com/ramya-rao-a/go-outline@latest \
+ && go install -v golang.org/x/tools/gopls@latest \
+ && go install -v github.com/go-delve/delve/cmd/dlv@latest

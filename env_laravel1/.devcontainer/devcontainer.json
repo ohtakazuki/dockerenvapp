@@ -1,13 +1,16 @@
 {
   "name": "Laravel Basic",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "compose.yml",
   "service": "app",
   "workspaceFolder": "/var/www/html",
-  "extensions": [
-    "felixfbecker.php-debug",
-    "felixfbecker.php-intellisense"
-  ],
-  "settings": {
-    "editor.tabSize": 2,
-  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug"  
+      ],
+      "settings": {
+        "editor.tabSize": 2
+      }
+    }
+  }
 }

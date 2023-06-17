@@ -18,7 +18,7 @@ type Books struct {
 
 func main() {
   // DBへ接続
-  dsn := "my:my@tcp(https1_db:3306)/my?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn := "my:my@tcp(https1-db:3306)/my?charset=utf8mb4&parseTime=True&loc=Local"
   db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
   if err != nil {
     panic(err)

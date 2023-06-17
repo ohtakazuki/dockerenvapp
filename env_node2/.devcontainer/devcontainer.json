@@ -1,14 +1,18 @@
 {
   "name": "Node Nginx",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "compose.yml",
   "service": "app",
   "workspaceFolder": "/var/www/html",
-  "extensions": [
-	  "digitalbrainstem.javascript-ejs-support",
-	  "dbaeumer.vscode-eslint",
-	  "leizongmin.node-module-intellisense"
-  ],
-  "settings": {
-    "editor.tabSize": 2,
-  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "digitalbrainstem.javascript-ejs-support",
+        "dbaeumer.vscode-eslint",
+        "leizongmin.node-module-intellisense"
+      ],
+      "settings": {
+        "editor.tabSize": 2
+      }
+    }
+  }
 }
