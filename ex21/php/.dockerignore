@@ -24,7 +24,7 @@ tmp/
 storage/logs/ # Laravelなど
 
 # 環境変数
-.env*
+# .env*
 
 # テスト
 tests/

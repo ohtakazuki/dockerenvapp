@@ -15,8 +15,8 @@ Thumbs.db
 npm-debug.log*
 
 # 環境変数ファイル
-.env
-/.devcontainer/.env
+# .env
+# /.devcontainer/.env
 
 # MongoDB データボリューム (Docker管理なのでGitでは無視)
 # db-data/ (ボリューム名を直接指定するわけではない)

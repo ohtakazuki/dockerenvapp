@@ -11,8 +11,8 @@ app # ビルド後の実行ファイル名 (適宜変更)
 # vendor/ # If using vendoring
 
 # Environment variables
-.env # プロジェクトルートに置く場合
-/.devcontainer/.env # devcontainer内に置く場合
+# .env # プロジェクトルートに置く場合
+# /.devcontainer/.env # devcontainer内に置く場合
 
 # Editor/IDE specific
 # .vscode/
