@@ -14,7 +14,8 @@ RUN apk add --no-cache --virtual .build-deps \
         g++ \
         linux-headers \
     && apk add --no-cache --virtual .persistent-deps \
-        tzdata
+        tzdata \
+    && apk add --no-cache sudo
 
 # Xdebug を PECL 経由でインストール
 RUN pecl install xdebug \
@@ -35,19 +36,30 @@ RUN echo "" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 # ビルド時依存関係を削除
 RUN apk del .build-deps
 
-# 非rootユーザー 'appuser' (UID 1001) を作成し、作業ディレクトリの所有者にする
-# シェルを /bin/sh に指定 (-s /bin/sh を追加)
+# 非rootユーザー 'appuser' (UID 1001) を作成
 RUN addgroup -S -g 1001 appgroup && \
-    adduser -S -u 1001 -s /bin/sh -G appgroup appuser && \
-    mkdir -p ${APP_DIR} && \
+    adduser -S -u 1001 -s /bin/sh -G appgroup appuser
+
+# appuser がパスワードなしで sudo を実行できるようにする
+RUN mkdir -p /etc/sudoers.d && \
+    echo "appuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/appuser && \
+    chmod 0440 /etc/sudoers.d/appuser
+
+# 作業ディレクトリとvendorディレクトリを作成し、所有者をappuserにする
+RUN mkdir -p ${APP_DIR}/vendor && \
     chown -R appuser:appgroup ${APP_DIR}
+
+# ユーザーを appuser に切り替える
+USER appuser
+WORKDIR ${APP_DIR}
 
 # 依存関係ファイルを先にコピー
 COPY --chown=appuser:appgroup composer.json composer.lock* ./
 
-# Composer をダウンロード・インストール
+# Composer をダウンロード・インストール (root権限が必要なので一時的に USER root)
 USER root
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    chmod +x /usr/local/bin/composer # 実行権限を付与
 
 # === composer install はここでは実行しない (devcontainer.json の postCreateCommand で実行) ===
 # # 依存関係を appuser としてインストール

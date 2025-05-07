@@ -40,7 +40,8 @@
 
   // コンテナ作成後に composer install を実行するコマンドを追加
   // これにより、マウント後に依存関係がインストールされる
-  "postCreateCommand": "composer install --no-interaction --optimize-autoloader",
+  // コンテナ作成後に /app/vendor の所有者を appuser に変更してから composer install を実行
+  "postCreateCommand": "sudo chown -R appuser:appgroup /app/vendor && composer install --no-interaction --optimize-autoloader"
 
   // (任意) コンテナ起動時のコマンド実行
   // "postStartCommand": "echo 'Dev Container Started!'"
