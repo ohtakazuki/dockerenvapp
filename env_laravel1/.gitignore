@@ -1,1 +1,22 @@
-/db/database
+# Docker / Dev Containers
+# .devcontainer/.env # Docker Compose 用の .env
+
+# Application specific
+# app/sample/.env # Laravel の .env
+app/sample/vendor/
+
+# Laravel Storage
+app/sample/storage/logs/*.log
+app/sample/storage/framework/sessions/*
+app/sample/storage/framework/views/*
+app/sample/storage/framework/cache/data/*
+app/sample/public/storage
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+# app/.vscode/ は launch.json を共有する場合 Git 管理下に含めることも検討
+# app/.vscode/*
+# !app/.vscode/launch.json

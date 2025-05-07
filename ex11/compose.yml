@@ -1,25 +1,37 @@
 services:
   db:
-    image: postgres:alpine3.18
-    container_name: 'ex11-db'
-    expose: 
+    image: postgres:17.4-alpine
+    container_name: 'ex11-db' # コンテナ名は元の例に合わせています
+    expose:
       - "5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # (オプション) データを永続化する場合は volumes を追加
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
 
-  web:
-    image: ex11/web:1.0
-    build: ./web
-    container_name: 'ex11-web'
-    ports:
-      - 8080:80
-    working_dir: '/var/www/html'
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile # Dockerfile名を明示 (デフォルト名なら省略可)
+    container_name: 'ex11-php' # コンテナ名は元の例に合わせています
     volumes:
-      - ./web/php.ini:/usr/local/etc/php/php.ini
-      - type: bind
-        source: ./web/src
-        target: /var/www/html
+      # ホストの ./php/src ディレクトリをコンテナの /app/src にマウントする
+      # これにより、開発中はホスト側のファイルで上書きされ、即時反映される
+      - ./php/src:/app/src
     depends_on:
       - db
+    environment:
+      # .env ファイルから読み込んだ変数をPHPアプリケーション用に設定
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    command: ["sleep", "infinity"] 
+
+# (オプション) DBデータを永続化するための名前付きボリューム定義
+# volumes:
+#   postgres_data:

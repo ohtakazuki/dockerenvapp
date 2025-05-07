@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Listen for Xdebug",
+        "type": "php",
+        "request": "launch",
+        "port": 9003,
+        "pathMappings": {
+          // Xdebugが認識するコンテナ内絶対パスのルート /var/www/html を
+          // VS Codeサーバーが認識するワークスペースルート ${workspaceFolder} (同じくコンテナ内の /var/www/html) にマッピング
+          "/var/www/html": "${workspaceFolder}"
+          // あるいは、より直接的に絶対パスで指定しても同じ意味になります
+          // "/var/www/html": "/var/www/html"
+        },
+        "log": true // デバッグコンソールに詳細ログを出力
+      }
+    ]
+  }

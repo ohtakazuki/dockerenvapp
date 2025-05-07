@@ -1,6 +1,5 @@
-create table books
-(
+CREATE TABLE books (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   title VARCHAR(100),
-  insert_timestamp DATETIME DEFAULT NULL
+  insert_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 );

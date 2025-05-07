@@ -1,13 +1,30 @@
 services:
-  web:
-    image: ex21/web:1.0
-    build: ./web
-    container_name: 'ex21-web'
-    ports:
-      - 8080:80
-    stdin_open: true
-    tty: true
-    working_dir: '/var/www/html'
+  php:
+    build:
+      # ビルドコンテキスト: compose.yml から見て ../php ディレクトリ
+      context: ../php
+
+    # コンテナ内の作業ディレクトリ
+    working_dir: /app
+
     volumes:
-      - ./web/php.ini:/usr/local/etc/php/php.ini
-      - ../web:/var/www/html
+      # ホストの php ディレクトリ全体をコンテナの /app にマウント
+      # これにより、ホストでのコード変更がコンテナ内に即時反映される (開発用)
+      # public ディレクトリが含まれるように ../php をマウント
+      - ../php:/app
+      # vendor ディレクトリは名前付きボリュームを使用し、ホストからの上書きを防ぐ
+      # コンテナ内の /app/vendor を vendor_data ボリュームに割り当てる
+      - vendor_data:/app/vendor
+
+    # コンテナ起動時に PHP ビルトインサーバーを起動
+    # -S 0.0.0.0:8000: すべてのネットワークインターフェースのポート8000で待機
+    # -t public: ドキュメントルートを /app/public に設定
+    command: php -S 0.0.0.0:8000 -t public
+
+    # Xdebug がホストマシン(VS Code)に接続できるように設定
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+# コンテナ間で共有・永続化するための名前付きボリュームを定義
+volumes:
+  vendor_data:

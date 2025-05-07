@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Listen for Xdebug", // Webリクエストのデバッグ用設定
+          "type": "php",               // デバッガーの種類 (xdebug.php-debug 拡張機能用)
+          "request": "launch",
+          "port": 9003,                // Xdebug が接続待機するポート (php.ini/xdebug.ini の xdebug.client_port と一致)
+          "pathMappings": {
+              "/app": "${workspaceFolder}" // コンテナ内のパス (/app) をホストのワークスペースパスにマッピング
+          },
+          "hostname": "0.0.0.0",       // VS Code デバッガーが接続を待機するアドレス
+          "log": false                  // デバッグアダプタのログ (問題発生時にtrueに)
+      },
+      {
+          "name": "PHP: Current File", // CLI スクリプトのデバッグ用設定
+          "type": "php",
+          "request": "launch",
+          "program": "${file}", // 現在アクティブなファイルを実行
+          "cwd": "${workspaceFolder}",
+          "runtimeExecutable": "/usr/local/bin/php",
+          "externalConsole": false,
+          "internalConsoleOptions": "openOnSessionStart"
+          // CLIデバッグでもXdebugを使う場合、環境変数 XDEBUG_MODE=debug XDEBUG_CONFIG="client_host=localhost client_port=9003" などを設定する必要がある場合がある
+      }
+  ]
+}

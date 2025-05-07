@@ -1,0 +1,50 @@
+services:
+  web:
+    image: nginx:stable-alpine
+    ports:
+      - '80:80' # ホストのポート80をコンテナのポート80にマッピング
+    volumes:
+      - ../web/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Nginx設定ファイルを読み取り専用でマウント
+    depends_on:
+      - app # appサービスが起動してからwebサービスを起動
+
+  app:
+    build:
+      context: ../app
+    # ports: # Nginx経由でアクセスするため、直接ポートを公開しない
+    #   - '3000:3000'
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../app:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy # dbサービスのヘルスチェックが成功するまで待機
+    environment:
+      - WATCHPACK_POLLING=true # ファイル変更監視をポーリング方式に
+
+  db:
+    image: mongo:8.0 # MongoDBのLTS安定版イメージを使用
+    # expose: # appサービスからの内部アクセスのみのため、公開は不要
+    #   - "27017"
+    environment:
+      - TZ=Asia/Tokyo
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    volumes:
+      - db-data:/data/db # 名前付きボリュームでデータを永続化
+      - ../db/init:/docker-entrypoint-initdb.d # 初期化スクリプトをマウント
+    healthcheck:
+      test: |
+        mongosh --host localhost --port 27017 \
+          --username $$MONGO_INITDB_ROOT_USERNAME \
+          --password $$MONGO_INITDB_ROOT_PASSWORD \
+          --authenticationDatabase admin --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db-data: # dbサービスで使用する名前付きボリューム

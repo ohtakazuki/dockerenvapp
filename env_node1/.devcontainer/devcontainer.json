@@ -1,18 +1,18 @@
 {
-  "name": "Node Basic",
-  "dockerComposeFile": "compose.yml",
-  "service": "app",
-  "workspaceFolder": "/var/www/html",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "digitalbrainstem.javascript-ejs-support",
-        "dbaeumer.vscode-eslint",
-        "leizongmin.node-module-intellisense"
-      ],
-      "settings": {
-        "editor.tabSize": 2
+    "name": "Node Basic",
+    "dockerComposeFile": "compose.yml",
+    "service": "app",
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "digitalbrainstem.javascript-ejs-support",
+          "dbaeumer.vscode-eslint",
+          "leizongmin.node-module-intellisense"
+        ],
+        "settings": {
+          "editor.tabSize": 2
+        }
       }
     }
   }
-}

@@ -1,0 +1,68 @@
+services:
+  web:
+    image: nginx:stable-alpine # Nginxイメージを使用
+    container_name: 'go-mysql-nginx-web'
+    ports:
+      - "80:80" # ホストのポート80をコンテナのポート80にマッピング
+    volumes:
+      - ../web/default.conf:/etc/nginx/conf.d/default.conf:ro # Nginx設定ファイルを読み取り専用でマウント
+    depends_on:
+      - app # appサービスが起動してからwebサービスを起動
+    environment:
+      - TZ=Asia/Tokyo
+
+  app:
+    build:
+      context: ../app # プロジェクトルートのappディレクトリをビルドコンテキストに
+      dockerfile: Dockerfile # ../app/Dockerfile を使用
+    container_name: 'go-mysql-nginx-app' # 任意でコンテナ名を指定
+    # ports: # ポートは公開せず、webサービスからのみアクセス
+    #   - '8080:8080'
+    expose:
+      - '8080' # webサービスからアクセスされるポート
+    ports: # Delveデバッガー用のポートは公開する
+      - '2345:2345'
+    volumes:
+      - ../app:/app # ホストのappディレクトリをコンテナの/appにマウント (コード変更を反映)
+      # Goモジュールのキャッシュを永続化 (オプション)
+      - go-mod-cache:/go/pkg/mod
+    depends_on:
+      db:
+        condition: service_healthy # dbサービスがhealthyになるまで待機
+    environment:
+      - GIN_MODE=debug # Ginフレームワークのモード (debug/release)
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - TZ=Asia/Tokyo
+    # デバッグ用に起動する場合 (launch.jsonと連携)
+    # command: dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec /app/main # これはlaunch.jsonで行うことが多い
+    stdin_open: true # コンテナの標準入力を開いたままにする
+    tty: true # TTYを割り当てる
+
+  db:
+    build:
+      context: ../db # プロジェクトルートのdbディレクトリをビルドコンテキストに
+      dockerfile: Dockerfile # ../db/Dockerfile を使用
+    container_name: 'go-mysql-nginx-db' # 任意でコンテナ名を指定
+    # expose: # ポートは公開せず、appサービスからのみアクセス
+    #   - "3306"
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql # 名前付きボリュームでデータを永続化
+      - ../db/init:/docker-entrypoint-initdb.d # 初期化SQLスクリプトをマウント
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db-data: # MySQLデータ用ボリューム
+  go-mod-cache: # Goモジュールキャッシュ用ボリューム (オプション)

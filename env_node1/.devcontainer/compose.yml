@@ -1,22 +1,22 @@
 services:
   app:
-    image: node1/app:1.0
-    build: ./app
-    container_name: 'node1-app'
+    build:
+      context: ../app
     ports:
       - '3000:3000'
     stdin_open: true
     tty: true
-    working_dir: '/var/www/html'
     volumes:
       - ../app:/var/www/html
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    environment:
+      - WATCHPACK_POLLING=true
 
   db:
-    image: mongo:6.0-jammy
-    container_name: 'node1-db'
-    expose: 
+    image: mongo:8.0
+    expose:
       - "27017"
     environment:
       - TZ=Asia/Tokyo
@@ -24,5 +24,18 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     volumes:
-      - ../db/database:/data/db
+      - db-data:/data/db
       - ../db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: |
+        mongosh --host localhost --port 27017 \
+          --username $$MONGO_INITDB_ROOT_USERNAME \
+          --password $$MONGO_INITDB_ROOT_PASSWORD \
+          --authenticationDatabase admin --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db-data:

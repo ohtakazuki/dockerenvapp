@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Sample",
+      "program": "${workspaceFolder}/sample/index.js", // 起動するスクリプト
+      "cwd": "${workspaceFolder}/sample", // 実行時のカレントディレクトリ
+      // デバッグポートはVS Codeが自動的にフォワードするため、通常は設定不要
+    }
+  ]
+}
