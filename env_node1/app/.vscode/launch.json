@@ -1,12 +1,13 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Sample",
-      "program": "${workspaceFolder}/sample/index.js",
-      "cwd": "${workspaceFolder}/sample"
-    }
-  ]
-}
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Sample",
+        "program": "${workspaceFolder}/sample/index.js",
+        "cwd": "${workspaceFolder}/sample"
+      }
+    ]
+  }
+  

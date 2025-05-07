@@ -1,0 +1,21 @@
+{
+  "name": "Node Nginx Basic",
+  "dockerComposeFile": "compose.yml",
+  "service": "app", // VS Codeが接続するサービスは 'app' (Node.js)
+  "workspaceFolder": "/var/www/html", // 'app' サービス内のワークスペース
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "digitalbrainstem.javascript-ejs-support",
+        "dbaeumer.vscode-eslint",
+        "leizongmin.node-module-intellisense"
+      ],
+      "settings": {
+        "editor.tabSize": 2
+      }
+    }
+  },
+  // Nginx(webサービス)のポートを転送（オプション）
+  // "forwardPorts": [80],
+  // ポート転送しない場合は、直接 http://localhost/ でアクセス
+}

@@ -1,0 +1,36 @@
+# Docker イメージのビルドコンテキストから除外するファイル/ディレクトリ
+
+# Git
+.git
+.gitignore
+
+# Composer
+vendor/
+# composer.lock # 通常は含めるが、環境によっては除外
+
+# エディタ関係
+.idea/
+.vscode/ # Dev Container設定はビルドに不要
+*.swp
+*.swo
+
+# OS関連
+.DS_Store
+Thumbs.db
+
+# ログ、一時ファイル
+*.log
+tmp/
+storage/logs/ # Laravelなど
+
+# 環境変数
+.env*
+
+# テスト
+tests/
+phpunit.xml*
+.phpunit.result.cache
+
+# ビルド関係 (Node.jsアセットなどがある場合)
+node_modules/
+public/build/

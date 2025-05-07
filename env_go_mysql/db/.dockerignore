@@ -1,0 +1,17 @@
+# Git files
+.git
+.gitignore
+
+# Initialization scripts (mounted via volume)
+init/
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# MySQL config (copied in Dockerfile, so keep it)
+# !my.cnf

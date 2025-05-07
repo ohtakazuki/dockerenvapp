@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Go App (Debug)",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug", // または "auto"
+      "program": "${workspaceFolder}/main.go", // エントリーポイント
+      "cwd": "${workspaceFolder}",
+      "env": {}, // 必要に応じて環境変数を追加
+      "args": [], // プログラムへの引数
+      // Delve 用の設定 (Dev Container経由の場合、VS Code拡張機能が適切に設定することが多い)
+      // "debugAdapter": "dlv-dap", // 推奨されるアダプター
+      // "port": 2345, // compose.yml で公開したポート
+      // "host": "127.0.0.1",
+    }
+  ]
+}

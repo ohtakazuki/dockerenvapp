@@ -1,0 +1,31 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Go build artifacts
+*.exe
+*.out
+app # ビルド後の実行ファイル名 (適宜変更)
+
+# Dependencies (managed by go.mod)
+# vendor/ # If using vendoring
+
+# Environment variables
+.env # プロジェクトルートに置く場合
+/.devcontainer/.env # devcontainer内に置く場合
+
+# Editor/IDE specific
+# .vscode/
+# !.vscode/launch.json # launch.jsonは共有することが多い
+
+# MySQL data volume (managed by Docker)
+# No need to ignore db-data volume path directly
+
+# Log files
+*.log
+
+# Nginx logs (if generated locally or mapped outside container)
+web/*.log
+
+# SSL Certificates
+certs/

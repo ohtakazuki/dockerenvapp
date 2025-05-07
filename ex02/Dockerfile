@@ -1,9 +1,8 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # tzdataのインストール
 RUN apt-get update -qq \
- && apt-get install -y --no-install-recommends \
-    tzdata \
+ && apt-get install -y --no-install-recommends tzdata \
  && rm -rf /var/lib/apt/lists/*
 
 # タイムゾーンを設定する環境変数
@@ -13,7 +12,7 @@ ENV TZ="Asia/Tokyo"
 WORKDIR /usr/local/etc/php
 
 # ファイルのコピー
-COPY php.ini ${PWD}
+COPY php.ini .
 
 # 一時変数の定義
 ARG wdir

@@ -1,31 +1,55 @@
 services:
   app:
-    image: laravel1/app:1.0
-    build: ./app
-    container_name: 'laravel1-app'
+    build:
+      # ビルドコンテキストは app ディレクトリ
+      context: ../app
+      # Dockerfile はコンテキスト内の Dockerfile を指定 (デフォルト名なので省略可)
+      # dockerfile: Dockerfile
+    container_name: 'laravel-app'
     ports:
       - '8000:8000'
-    stdin_open: true
-    tty: true
-    working_dir: '/var/www/html'
+    working_dir: /var/www/html
     volumes:
-      - ./app/php.ini:/usr/local/etc/php/php.ini
+      # ホストの app ディレクトリをマウント (コード同期)
       - ../app:/var/www/html
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    environment:
+      # Laravelが必要とする環境変数を設定可能 (app/sample/.env も参照される)
+      - APP_ENV=local
+      - APP_DEBUG=true
+      # DB接続情報は app/sample/.env で設定するのが一般的
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    tty: true
 
   db:
-    image: laravel1/mysql:1.0
-    build: ./db
-    container_name: 'laravel1-db'
-    expose: 
+    build:
+      # ビルドコンテキストは db ディレクトリ
+      context: ../db
+      # dockerfile: Dockerfile
+    container_name: 'laravel-db'
+    expose:
       - "3306"
     environment:
-      - TZ=Asia/Tokyo
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      # この compose.yml と同じディレクトリにある .env ファイルから読み込む
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Tokyo
     volumes:
-      - ../db/database:/var/lib/mysql
+      # データベース永続化に名前付きボリュームを使用
+      - db_data:/var/lib/mysql
+      # 初期化SQLをマウント
       - ../db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db_data: # データベース永続化用ボリューム

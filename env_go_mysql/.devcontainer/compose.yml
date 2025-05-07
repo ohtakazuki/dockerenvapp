@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      context: ../app # プロジェクトルートのappディレクトリをビルドコンテキストに
+      dockerfile: Dockerfile # ../app/Dockerfile を使用
+    container_name: 'go-mysql-app' # 任意でコンテナ名を指定
+    ports:
+      - '8080:8080' # ホストのポート8080をコンテナのポート8080にマッピング
+      - '2345:2345' # Delveデバッガー用のポート
+    volumes:
+      - ../app:/app # ホストのappディレクトリをコンテナの/appにマウント (コード変更を反映)
+      # Goモジュールのキャッシュを永続化 (オプション)
+      - go-mod-cache:/go/pkg/mod
+    depends_on:
+      db:
+        condition: service_healthy # dbサービスがhealthyになるまで待機
+    environment:
+      - GIN_MODE=debug # Ginフレームワークのモード (debug/release)
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    # デバッグ用に起動する場合 (launch.jsonと連携)
+    # command: dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec /app/main # これはlaunch.jsonで行うことが多い
+    stdin_open: true # コンテナの標準入力を開いたままにする
+    tty: true # TTYを割り当てる
+
+  db:
+    build:
+      context: ../db # プロジェクトルートのdbディレクトリをビルドコンテキストに
+      dockerfile: Dockerfile # ../db/Dockerfile を使用
+    container_name: 'go-mysql-db' # 任意でコンテナ名を指定
+    # expose: # ポートは公開せず、appサービスからのみアクセス
+    #   - "3306"
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql # 名前付きボリュームでデータを永続化
+      - ../db/init:/docker-entrypoint-initdb.d # 初期化SQLスクリプトをマウント
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db-data: # MySQLデータ用ボリューム
+  go-mod-cache: # Goモジュールキャッシュ用ボリューム (オプション)

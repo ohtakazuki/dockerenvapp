@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>書籍リスト</title>
+  <style>
+    body { font-family: sans-serif; }
+    table { border-collapse: collapse; width: 80%; margin: 20px auto; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>書籍リスト</h1>
+  {{ if .books }}
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>タイトル</th>
+        <th>登録日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .books }}
+      <tr>
+        <td>{{ .Id }}</td>
+        <td>{{ .Title }}</td>
+        <td>{{ if .InsertTimestamp }}{{ .InsertTimestamp.Format "2006-01-02 15:04:05" }}{{ else }}N/A{{ end }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+  {{ else }}
+  <p>登録されている書籍はありません。</p>
+  {{ end }}
+</body>
+</html>

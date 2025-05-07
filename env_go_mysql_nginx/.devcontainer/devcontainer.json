@@ -1,0 +1,25 @@
+{
+  "name": "Go MySQL Nginx",
+  "dockerComposeFile": "compose.yml", // 同じディレクトリにある compose.yml を参照
+  "service": "app", // VS Codeがアタッチするサービス
+  "workspaceFolder": "/app", // 'app'サービス内のワークスペース (DockerfileのWORKDIRと合わせる)
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.Go" // 公式Go拡張機能
+      ],
+      "settings": {
+        "editor.tabSize": 4, // Goの標準はタブ文字だが、スペース4つにする場合
+        "[go]": {
+            "editor.insertSpaces": false, // タブ文字を使用
+            "editor.tabSize": 4,
+            "editor.formatOnSave": true
+        },
+        "go.toolsManagement.autoUpdate": true,
+        "go.useLanguageServer": true
+      }
+    }
+  },
+  // コンテナ起動後にGoツールをインストールする場合
+  // "postCreateCommand": "go install golang.org/x/tools/gopls@latest && go install github.com/go-delve/delve/cmd/dlv@latest"
+}

@@ -1,2 +1,22 @@
-/db/database
-node_modules/
+# プロジェクトルートの .gitignore
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# IDE/Editor設定
+.vscode/
+!.vscode/launch.json
+
+# 依存関係
+/app/node_modules/
+
+# ログファイル
+*.log
+npm-debug.log*
+
+# 環境変数ファイル
+.env
+/.devcontainer/.env
+
+# MongoDB データディレクトリ
+/db/database/

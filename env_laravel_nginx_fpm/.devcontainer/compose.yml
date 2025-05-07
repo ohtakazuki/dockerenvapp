@@ -1,0 +1,69 @@
+services:
+  web:
+    image: nginx:1.27-alpine # Nginxイメージを指定
+    container_name: 'laravel-nginx'
+    ports:
+      - '80:80' # ホストのポート80をコンテナのポート80にマッピング
+    volumes:
+      # アプリケーションコードをマウント (Nginxが静的ファイルを提供、PHPパス解決に利用)
+      - ../app:/var/www/html
+      # Nginx設定ファイルをマウント
+      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app # app(PHP-FPM)サービスが起動してから起動
+    working_dir: /var/www/html # working_dir は必須ではないが設定しておく
+
+  app:
+    build:
+      # ビルドコンテキストは app ディレクトリ
+      context: ../app
+      # dockerfile: Dockerfile (デフォルト名なので省略可)
+    container_name: 'laravel-app-fpm'
+    # ポートは公開せず、Nginxからの接続のみ受け付ける (expose はドキュメント用)
+    # expose:
+    #   - "9000"
+    working_dir: /var/www/html
+    volumes:
+      # ホストの app ディレクトリをマウント (コード同期、PHP-FPMが実行)
+      - ../app:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Laravelが必要とする環境変数を設定可能 (app/sample/.env も参照される)
+      - APP_ENV=local
+      - APP_DEBUG=true
+      # DB接続情報は app/sample/.env で設定するのが一般的
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Xdebug用
+    # tty: true # FPM実行には通常不要
+
+  db:
+    build:
+      # ビルドコンテキストは db ディレクトリ
+      context: ../db
+      # dockerfile: Dockerfile
+    container_name: 'laravel-db'
+    expose:
+      - "3306"
+    environment:
+      # この compose.yml と同じディレクトリにある .env ファイルから読み込む
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Tokyo
+    volumes:
+      # データベース永続化に名前付きボリュームを使用
+      - db_data:/var/lib/mysql
+      # 初期化SQLをマウント
+      - ../db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  db_data: # データベース永続化用ボリューム

@@ -1,0 +1,11 @@
+{
+    "name": "ex11/app",
+    "description": "PHP application connecting to PostgreSQL",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}

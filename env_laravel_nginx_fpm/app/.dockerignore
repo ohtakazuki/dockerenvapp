@@ -1,0 +1,29 @@
+# Git リポジトリ情報
+.git
+.gitignore
+
+# IDE/エディタ設定
+.vscode/
+.idea/
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# Laravel プロジェクト固有の除外対象 (sample/ 配下)
+sample/vendor/
+sample/node_modules/
+sample/public/storage/
+sample/public/hot
+sample/storage/framework/sessions/*
+sample/storage/framework/views/*
+sample/storage/framework/cache/data/*
+sample/storage/logs/*.log
+!sample/storage/logs/.gitkeep
+# sample/.env # 本番イメージなどでは含めない。開発用でもDockerfileで直接コピーしないなら不要。
+npm-debug.log*
+yarn-error.log*
+
+# Dockerfile自体やビルドに必要な設定ファイルは除外しない
+# !Dockerfile
+# !php.ini

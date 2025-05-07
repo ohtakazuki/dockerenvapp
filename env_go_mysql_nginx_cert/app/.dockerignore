@@ -1,0 +1,25 @@
+# Git files
+.git
+.gitignore
+
+# IDE/Editor specific
+.vscode/
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Go build artifacts (local builds)
+*.exe
+*.out
+app
+
+# Environment files (if present in this directory)
+# .env

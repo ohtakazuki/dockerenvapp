@@ -1,16 +1,23 @@
 {
-  "name": "Laravel Basic",
+  "name": "Laravel Basic (DevContainer)",
   "dockerComposeFile": "compose.yml",
   "service": "app",
   "workspaceFolder": "/var/www/html",
+  "remoteUser": "appuser",
   "customizations": {
     "vscode": {
       "extensions": [
-        "xdebug.php-debug"  
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "neilbrayfield.php-docblocker",
+        "MehediDracula.php-namespace-resolver"
       ],
       "settings": {
-        "editor.tabSize": 2
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "php.validate.executablePath": "/usr/local/bin/php"
       }
     }
-  }
+  },
+  "forwardPorts": [8000]
 }

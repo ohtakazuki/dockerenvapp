@@ -3,17 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>書籍リスト</title>
+  <style>
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+  </style>
 </head>
 <body>
-  <table border="1">
-    <% books.forEach(function (book, key) { %>
-    <tr>
-      <td><%= key %></td>
-      <td><%= book.title %></td>
-      <td><%= book.date %></td>
-    </tr>
-    <% }); %>
+  <h1>書籍リスト</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>タイトル</th>
+        <th>登録日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% books.forEach(function (book, index) { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= book.title %></td>
+        <td><%= book.date %></td> <%# index.js でフォーマット済みの date を表示 %>
+      </tr>
+      <% }); %>
+    </tbody>
   </table>
 </body>
 </html>

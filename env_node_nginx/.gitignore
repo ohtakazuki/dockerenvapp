@@ -1,0 +1,25 @@
+# プロジェクトルートの .gitignore
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# IDE/Editor設定
+.vscode/
+!.vscode/launch.json
+
+# 依存関係
+/app/node_modules/
+
+# ログファイル
+*.log
+npm-debug.log*
+
+# 環境変数ファイル
+.env
+/.devcontainer/.env
+
+# MongoDB データボリューム (Docker管理なのでGitでは無視)
+# db-data/ (ボリューム名を直接指定するわけではない)
+
+# Nginx設定（環境依存の可能性がある場合）
+# /web/nginx.conf
