@@ -3,7 +3,7 @@
 .gitignore
 
 # IDE/エディタ設定
-.vscode/
+# .vscode/
 .idea/
 
 # OS固有ファイル

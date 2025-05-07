@@ -4,8 +4,8 @@
 Thumbs.db
 
 # IDE/Editor設定
-.vscode/
-!.vscode/launch.json
+# .vscode/
+# !.vscode/launch.json
 
 # 依存関係
 /app/node_modules/
